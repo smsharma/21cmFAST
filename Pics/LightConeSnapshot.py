@@ -47,8 +47,9 @@ if __name__ == '__main__':
 
     # Generates the co-eval redshifts output by 21cmFAST/21CMMC.
 	# Set z_min, z_max and z_step_factor. These must be the same as in 21cmFAST/21CMMC.
-    ZLOW = 10. # ZLOW in Programs/drive_logZscroll_Ts.c
-    ZHIGH = 25. # Z_HEAT_MAX in Parameter_files/HEAR_PARAMS.H
+    ZLOW = 6. # ZLOW in Programs/drive_logZscroll_Ts.c
+    ZHIGH = 30. # Z_HEAT_MAX in Parameter_files/HEAR_PARAMS.H
+
     z_step_factor = 1.02 # ZPRIME_STEP_FACTOR in Parameter_files/HEAT_PARAMS.H
     z = ZLOW*1.0001
 
@@ -331,7 +332,11 @@ if __name__ == '__main__':
     # i.e. NumBoxes * panel_height * overall y length = panel_width * overall x length
     x_total = 18. # set an arbitrary width of the figure
     y_total = panel_width*x_total/float(NumBoxes)/panel_height
+<<<<<<< HEAD
     # print 'figure size is (',x_total,',',y_total,')'
+=======
+    print 'figure size is (',x_total,',',y_total,')'
+>>>>>>> 54c89727e998a79ce67039db5a6137bb0e13b5e6
     fig = plt.figure(figsize=(x_total,y_total))
 
 
