@@ -891,13 +891,13 @@ float get_Ts(float z, float delta, float TK, float xe, float Jalpha, float * cur
   double TS,TSold,TSinv;
   double Tceff;
 
+  // TODO: mod TCMB here
+
   double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
   float curr_z, curr_Trad;
   FILE *F;
 
   int i;
-
-  // TODO: mod TCMB here
 
   if (!(F=fopen(TRAD_FILENAME, "r"))){
     fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
@@ -966,7 +966,41 @@ double xcoll_HI(double z, double TK, double delta, double xe)
   double xcoll;
 
   // TODO: mod TCMB here
-  Trad = 4*T_cmb*(1.0+z);
+
+  double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
+  float curr_z, curr_Trad;
+  FILE *F;
+
+  int i;
+
+  if (!(F=fopen(TRAD_FILENAME, "r"))){
+    fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
+    fprintf(LOG, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);      
+    return 0;
+  }
+
+  for (i=0;i<N_TRAD_PTS;i++) {
+    fscanf(F, "%f %e", &curr_z, &curr_Trad);
+    z_tab[i] = curr_z;
+    Trad_tab[i] = curr_Trad;
+  }
+  fclose(F);
+
+  // Interpolation of the photon temperature 
+  static gsl_interp_accel *Trad_acc;
+  static gsl_spline *Trad_spline;
+
+  // Set up spline table
+  Trad_acc = gsl_interp_accel_alloc ();
+  Trad_spline = gsl_spline_alloc (gsl_interp_linear, N_TRAD_PTS);
+
+  gsl_spline_init (Trad_spline, z_tab, Trad_tab, N_TRAD_PTS);
+  Trad = gsl_spline_eval(Trad_spline, z, Trad_acc);
+
+  gsl_spline_free (Trad_spline);
+  gsl_interp_accel_free (Trad_acc);
+
+  // Trad = T_cmb*(1.0+z);  
   nH = (1.0-xe)*No*pow(1.0+z,3.0)*(1.0+delta);
   krate = kappa_10(TK,0);
   xcoll = T21/Trad*nH*krate/A10_HYPERFINE;
@@ -981,7 +1015,41 @@ double xcoll_elec(double z, double TK, double delta, double xe)
   double xcoll;
 
   // TODO: mod TCMB here
-  Trad = 4*T_cmb*(1.0+z);
+
+  double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
+  float curr_z, curr_Trad;
+  FILE *F;
+
+  int i;
+
+  if (!(F=fopen(TRAD_FILENAME, "r"))){
+    fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
+    fprintf(LOG, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);      
+    return 0;
+  }
+
+  for (i=0;i<N_TRAD_PTS;i++) {
+    fscanf(F, "%f %e", &curr_z, &curr_Trad);
+    z_tab[i] = curr_z;
+    Trad_tab[i] = curr_Trad;
+  }
+  fclose(F);
+
+  // Interpolation of the photon temperature 
+  static gsl_interp_accel *Trad_acc;
+  static gsl_spline *Trad_spline;
+
+  // Set up spline table
+  Trad_acc = gsl_interp_accel_alloc ();
+  Trad_spline = gsl_spline_alloc (gsl_interp_linear, N_TRAD_PTS);
+
+  gsl_spline_init (Trad_spline, z_tab, Trad_tab, N_TRAD_PTS);
+  Trad = gsl_spline_eval(Trad_spline, z, Trad_acc);
+
+  gsl_spline_free (Trad_spline);
+  gsl_interp_accel_free (Trad_acc);
+
+  // Trad = T_cmb*(1.0+z);  
   ne = xe*N_b0*pow(1.0+z,3.0)*(1.0+delta);
   krate = kappa_10_elec(TK,0);
   xcoll = T21/Trad*ne*krate/A10_HYPERFINE;
@@ -994,7 +1062,41 @@ double xcoll_prot(double z, double TK, double delta, double xe)
   double xcoll;
 
   // TODO: mod TCMB here
-  Trad = 4*T_cmb*(1.0+z);
+
+  double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
+  float curr_z, curr_Trad;
+  FILE *F;
+
+  int i;
+
+  if (!(F=fopen(TRAD_FILENAME, "r"))){
+    fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
+    fprintf(LOG, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);      
+    return 0;
+  }
+
+  for (i=0;i<N_TRAD_PTS;i++) {
+    fscanf(F, "%f %e", &curr_z, &curr_Trad);
+    z_tab[i] = curr_z;
+    Trad_tab[i] = curr_Trad;
+  }
+  fclose(F);
+
+  // Interpolation of the photon temperature 
+  static gsl_interp_accel *Trad_acc;
+  static gsl_spline *Trad_spline;
+
+  // Set up spline table
+  Trad_acc = gsl_interp_accel_alloc ();
+  Trad_spline = gsl_spline_alloc (gsl_interp_linear, N_TRAD_PTS);
+
+  gsl_spline_init (Trad_spline, z_tab, Trad_tab, N_TRAD_PTS);
+  Trad = gsl_spline_eval(Trad_spline, z, Trad_acc);
+
+  gsl_spline_free (Trad_spline);
+  gsl_interp_accel_free (Trad_acc);
+
+  // Trad = T_cmb*(1.0+z);  
   np = xe*No*pow(1.0+z,3.0)*(1.0+delta);
   krate = kappa_10_pH(TK,0);
   xcoll = T21/Trad*np*krate/A10_HYPERFINE;

@@ -77,7 +77,39 @@ int main(int argc, char ** argv){
   LOG = fopen(filename, "w");
   if (!LOG){ fprintf(stderr, "delta_T.c: Error opening log file %s\n", filename);}
   // TODO: mod TCMB here
-  T_rad = 4*T_cmb*(1+REDSHIFT);
+
+  double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
+  float curr_z, curr_Trad;
+  FILE *FF;
+
+  int iii;
+
+  if (!(FF=fopen(TRAD_FILENAME, "r"))){
+    fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
+    fprintf(LOG, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);      
+    return 0;
+  }
+
+  for (iii=0;iii<N_TRAD_PTS;iii++) {
+    fscanf(FF, "%f %e", &curr_z, &curr_Trad);
+    z_tab[iii] = curr_z;
+    Trad_tab[iii] = curr_Trad;
+  }
+  fclose(FF);
+
+  // Interpolation of the photon temperature 
+  static gsl_interp_accel *Trad_acc;
+  static gsl_spline *Trad_spline;
+
+  // Set up spline table
+  Trad_acc = gsl_interp_accel_alloc ();
+  Trad_spline = gsl_spline_alloc (gsl_interp_linear, N_TRAD_PTS);
+
+  gsl_spline_init (Trad_spline, z_tab, Trad_tab, N_TRAD_PTS);
+  T_rad = gsl_spline_eval(Trad_spline, REDSHIFT, Trad_acc);
+
+  gsl_spline_free (Trad_spline);
+  gsl_interp_accel_free (Trad_acc);
   H = hubble(REDSHIFT);
   const_factor = 27 * (OMb*hlittle*hlittle/0.023) * 
     sqrt( (0.15/OMm/hlittle/hlittle) * (1+REDSHIFT)/10.0 );

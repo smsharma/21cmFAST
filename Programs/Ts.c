@@ -918,8 +918,42 @@ double freq_int_heat[NUM_FILTER_STEPS_FOR_Ts], freq_int_ion[NUM_FILTER_STEPS_FOR
 
       if (Tk_box[box_ct]<0){ // spurious bahaviour of the trapazoidalintegrator. generally overcooling in underdensities
   
-  // TODO: mod TCMB here
-  Tk_box[box_ct] = 4*T_cmb*(1+zp);
+        // TODO: mod TCMB here
+
+        double z_tab[N_TRAD_PTS], Trad_tab[N_TRAD_PTS];
+        float curr_z, curr_Trad;
+        FILE *F;
+
+        int i;
+
+        if (!(F=fopen(TRAD_FILENAME, "r"))){
+          fprintf(stderr, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);
+          fprintf(LOG, "Unable to open the Trad file at %s\nAborting\n", TRAD_FILENAME);      
+          // return 0;
+        }
+
+        for (i=0;i<N_TRAD_PTS;i++) {
+          fscanf(F, "%f %e", &curr_z, &curr_Trad);
+          z_tab[i] = curr_z;
+          Trad_tab[i] = curr_Trad;
+        }
+        fclose(F);
+
+        // Interpolation of the photon temperature 
+        static gsl_interp_accel *Trad_acc;
+        static gsl_spline *Trad_spline;
+
+        // Set up spline table
+        Trad_acc = gsl_interp_accel_alloc ();
+        Trad_spline = gsl_spline_alloc (gsl_interp_linear, N_TRAD_PTS);
+
+        gsl_spline_init (Trad_spline, z_tab, Trad_tab, N_TRAD_PTS);
+
+        gsl_spline_free (Trad_spline);
+        gsl_interp_accel_free (Trad_acc);
+
+        Tk_box[box_ct] = gsl_spline_eval(Trad_spline, zp, Trad_acc);
+
       }
       if (COMPUTE_Ts){
 	J_alpha_tot = dansdz[2]; //not really d/dz, but the lya flux
@@ -961,7 +995,7 @@ double freq_int_heat[NUM_FILTER_STEPS_FOR_Ts], freq_int_ion[NUM_FILTER_STEPS_FOR
     Xheat_ave /= (double)HII_TOT_NUM_PIXELS;
     Xion_ave /= (double)HII_TOT_NUM_PIXELS;
     // write to global evolution file
-    // TODO: mod TCMB here
+    // TODO: mod TCMB here // Incorrect CMB temperature here
     fprintf(GLOBAL_EVOL, "%f\t%f\t%f\t%e\t%f\t%f\t%e\t%e\t%e\t%e\n", zp, filling_factor_of_HI_zp, Tk_ave, x_e_ave, Ts_ave, 4*T_cmb*(1+zp), J_alpha_ave, xalpha_ave, Xheat_ave, Xion_ave);
     fflush(NULL);
 
