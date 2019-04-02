@@ -28,12 +28,12 @@
   See 'SHARP_CUTOFF' in this file.
 
 ***********************************************/
-#define N_GAMMA_UV (float) (5000) // number of ionizing photons per stellar baryon
-#define STELLAR_BARYON_FRAC (double) (0.05) // defined for 10^10 Msun halos
-#define STELLAR_BARYON_PL (double) (0.5) //power law index w/ halo mass
-#define ESC_FRAC (double) (0.1) // ionizing escape fraction, defined for 10^10 Msun halos
-#define ESC_PL (double) (-0.5) //power law index w/ halo mass
-#define M_TURNOVER (double) (5e8) // Halo mass threshold for efficient star formation (in Msun). 
+#define N_GAMMA_UV (float) (<N_GAMMA_UV>) // number of ionizing photons per stellar baryon
+#define STELLAR_BARYON_FRAC (double) (<F_STAR>) // defined for 10^10 Msun halos
+#define STELLAR_BARYON_PL (double) (<STELLAR_BARYON_PL>) //power law index w/ halo mass
+#define ESC_FRAC (double) (<F_ESC>) // ionizing escape fraction, defined for 10^10 Msun halos
+#define ESC_PL (double) (<ESC_PL>) //power law index w/ halo mass
+#define M_TURNOVER (double) (<M_TURNOVER>) // Halo mass threshold for efficient star formation (in Msun). 
 
 
 /**********************************************
@@ -68,7 +68,7 @@
   If SHARP_CUTOFF = 1, use the constant ionizing efficency parameter \zeta = N_{\gammaUV} x f_{esc} x f_{\ast}
   with sharp cut-off at M_TURNOVER.
 */
-#define SHARP_CUTOFF (int) (0)
+#define SHARP_CUTOFF (int) (<SHARP_CUTOFF>)
 
 /*
   Maximum horizon for ionizing photons, in comoving Mpc.
@@ -87,11 +87,11 @@
 /*
   EVOLVE_DENSITY_LINEARLY = 1, evolve the density field with linear theory.
                 If choosing this option, make sure that your cell size is
-		in the linear regime at the redshift of interest
+    in the linear regime at the redshift of interest
 
   EVOLVE_DENSITY_LINEARLY = 0, evolve the density field with 1st order perturbation theory.
                 If choosing this option, make sure that you resolve small 
-		enough scales, roughly we find BOX_LEN/DIM should be < 1Mpc
+    enough scales, roughly we find BOX_LEN/DIM should be < 1Mpc
  */
 #define EVOLVE_DENSITY_LINEARLY (int) (0)
 
