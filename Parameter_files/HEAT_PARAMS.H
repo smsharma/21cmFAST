@@ -69,7 +69,7 @@ Filter choice used for smoothing the linear density field to obtain the collapse
 /*
   Redshift step-size used in the z' integral.  Logarithmic dz.
 */
-#define ZPRIME_STEP_FACTOR (float) (1.02)
+#define ZPRIME_STEP_FACTOR (float) (1.1)
 
 
 /*
