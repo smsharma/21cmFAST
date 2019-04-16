@@ -69,7 +69,7 @@ Filter choice used for smoothing the linear density field to obtain the collapse
 /*
   Redshift step-size used in the z' integral.  Logarithmic dz.
 */
-#define ZPRIME_STEP_FACTOR (float) (1.1)
+#define ZPRIME_STEP_FACTOR (float) (1.02)
 
 
 /*
@@ -97,8 +97,6 @@ Filter choice used for smoothing the linear density field to obtain the collapse
 #define STELLAR_SPECTRA_FILENAME (const char *) "../External_tables/stellar_spectra.dat"
 #define KAPPA_EH_FILENAME (const char *) "../External_tables/kappa_eH_table.dat"
 #define KAPPA_PH_FILENAME (const char *) "../External_tables/kappa_pH_table.dat"
-
-// #define TRAD_FILENAME (const char *) <TRAD_FILENAME> // "../External_tables/Tcmb_table.dat"
 #define TRAD_FILENAME (const char *) "../External_tables/Tcmb_table.dat"
 #define N_TRAD_PTS (int) <N_TRAD_PTS> //40
 
