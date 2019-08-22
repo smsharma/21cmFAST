@@ -708,7 +708,9 @@ double freq_int_heat[NUM_FILTER_STEPS_FOR_Ts], freq_int_ion[NUM_FILTER_STEPS_FOR
 	
       zpp_edge[R_ct] = prev_zpp - (R_values[R_ct] - prev_R)*CMperMPC / drdz(prev_zpp); // cell size
       zpp = (zpp_edge[R_ct]+prev_zpp)*0.5; // average redshift value of shell: z'' + 0.5 * dz''
-	  if (zpp - redshift_interp_table[arr_num+R_ct] > 1e-3) printf("zpp = %.4f, zpp_array = %.4f\n", zpp, redshift_interp_table[arr_num+R_ct]);
+    if (HALO_MASS_DEPENDENT_IONIZING_EFFICIENCY) {
+      if (zpp - redshift_interp_table[arr_num+R_ct] > 1e-3) printf("zpp = %.4f, zpp_array = %.4f\n", zpp, redshift_interp_table[arr_num+R_ct]);
+    }
       if(SHARP_CUTOFF) sigma_Tmin[R_ct] =  sigma_z0(M_MIN); // In v2 sigma_Tmin doesn't nedd to be an array, just a constant.
 
       // let's now normalize the total collapse fraction so that the mean is the
@@ -969,8 +971,8 @@ double freq_int_heat[NUM_FILTER_STEPS_FOR_Ts], freq_int_ion[NUM_FILTER_STEPS_FOR
 
 /***************  END PARALLELIZED LOOP ******************************************************************/
     time(&curr_time);
-    fprintf(stderr, "End scrolling through the box, which took %06.2 min\n", difftime(curr_time, start_time)/60.0);
-    fprintf(LOG, "End scrolling through the box, which took %06.2 min\n", difftime(curr_time, start_time)/60.0);
+    fprintf(stderr, "End scrolling through the box, which took %06.2f min\n", difftime(curr_time, start_time)/60.0);
+    fprintf(LOG, "End scrolling through the box, which took %06.2f min\n", difftime(curr_time, start_time)/60.0);
     fflush(NULL);
 
     // compute new average values
