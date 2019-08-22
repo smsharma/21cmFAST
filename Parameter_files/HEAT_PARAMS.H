@@ -21,7 +21,8 @@ NOTE:  We encourage the user to perform their own convergance tests if modifying
   There might be wierd behaviour if you set this to less than the HeII ionization
   threshold, <~54.4 eV
 */
-#define L_X (double) (<L_X>)
+// #define L_X (double) (<L_X>)
+#define L_X (double) (40.5)
 #define NU_X_BAND_MAX (double) (2000*NU_over_EV)
 #define NU_X_THRESH (double) (500*NU_over_EV)
 
@@ -98,7 +99,8 @@ Filter choice used for smoothing the linear density field to obtain the collapse
 #define KAPPA_EH_FILENAME (const char *) "../External_tables/kappa_eH_table.dat"
 #define KAPPA_PH_FILENAME (const char *) "../External_tables/kappa_pH_table.dat"
 #define TRAD_FILENAME (const char *) "../External_tables/Tcmb_table.dat"
-#define N_TRAD_PTS (int) <N_TRAD_PTS> //40
+// #define N_TRAD_PTS (int) <N_TRAD_PTS> //40
+#define N_TRAD_PTS (int) 40
 
 /*
   Stellar Population responsible for early heating
